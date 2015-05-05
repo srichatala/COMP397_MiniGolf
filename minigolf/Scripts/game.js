@@ -22,6 +22,8 @@ var circle;
 var nextLevel;
 var playbutton;
 var instrButton;
+var bgrnd;
+var title;
 
 //initial function to load the game
 function init() {
@@ -41,7 +43,7 @@ function tick(e) {
 }
 function ballImg() {
 
-    var bgrnd = new createjs.Bitmap(imageBall);
+    bgrnd = new createjs.Bitmap(imageBall);
     createjs.Tween.get(bgrnd, { loop: true })
     .to({ x: 420 }, 1000, createjs.Ease.getPowInOut(4))
     .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
@@ -86,7 +88,11 @@ function buttonOver() {
     playbutton.alpha = 0.5;
 }
 function gameStart() {
-    console.log("gameStarted");
+    stage.removeChild(playbutton);
+    stage.removeChild(instrButton);
+    stage.removeChild(bgrnd);
+    stage.removeChild(title);
+    main();
 }
 function instrImg() {
     instrButton = new createjs.Bitmap(instructions);
@@ -106,10 +112,17 @@ function buttonOver1() {
     instrButton.alpha = 0.5;
 }
 function instructionsInfo() {
-    console.log("Instrcutions");
+    stage.removeChild(playbutton);
+    stage.removeChild(instrButton);
+    stage.removeChild(bgrnd);
+    stage.removeChild(title);
+    instructionsDetails();
+}
+function instructionsDetails() {
+    
 }
 function nameImg() {
-    var title = new createjs.Bitmap(titleImg);
+    title = new createjs.Bitmap(titleImg);
     title.x = 25;
     title.y = 150;
     stage.addChild(title);

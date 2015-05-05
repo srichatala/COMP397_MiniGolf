@@ -1,7 +1,7 @@
 ﻿//Author:Srinivasarao Chatala
 //Date-Created:04/25/2015
 //Last-modified-by: Sri Chatala
-//Last-modified-Date: 04/26/2015
+//Last-modified-Date: 05/05/2015
 //Description:
 
 
@@ -37,6 +37,18 @@ function init() {
     mainInfo();
 }
 function tick(e) {
+    stage.update();
+}
+function ballImg() {
+
+    var bgrnd = new createjs.Bitmap(imageBall);
+    createjs.Tween.get(bgrnd, { loop: true })
+    .to({ x: 420 }, 1000, createjs.Ease.getPowInOut(4))
+    .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+    .to({ alpha: 0, y: 350 }, 100)
+    .to({ alpha: 1, y: 280 }, 500, createjs.Ease.getPowInOut(2))
+    .to({ x: 50 }, 800, createjs.Ease.getPowInOut(2));
+    stage.addChild(bgrnd);
     stage.update();
 }
 function mainInfo() {
@@ -98,21 +110,9 @@ function instructionsInfo() {
 }
 function nameImg() {
     var title = new createjs.Bitmap(titleImg);
-    title.x = 400;
-    title.y = 50;
+    title.x = 25;
+    title.y = 150;
     stage.addChild(title);
-    stage.update();
-}
-function ballImg() {
-
-    var bgrnd = new createjs.Bitmap(imageBall);
-    createjs.Tween.get(bgrnd, { loop: true })
-    .to({ x: 420 }, 1000, createjs.Ease.getPowInOut(4))
-    .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
-    .to({ alpha: 0, y: 350 }, 100)
-    .to({ alpha: 1, y: 280 }, 500, createjs.Ease.getPowInOut(2))
-    .to({ x: 50 }, 800, createjs.Ease.getPowInOut(2));
-    stage.addChild(bgrnd);
     stage.update();
 }
 function main() {

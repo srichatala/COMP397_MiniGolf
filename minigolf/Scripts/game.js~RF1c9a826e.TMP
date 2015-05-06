@@ -27,10 +27,6 @@ var title;
 var instructionsText;
 var backbutton;
 var backhome;
-var blocksFront;
-var blocksBack;
-var playAgain;
-var playAgainButton;
 
 //initial function to load the game
 function init() {
@@ -39,17 +35,17 @@ function init() {
     stage = new createjs.Stage(canvas);
     stage.enableMouseOver(20);
     score = 0;
-    //createjs.Sound.initializeDefaultPlugins();
+    createjs.Sound.initializeDefaultPlugins();
 
-    //var audioPath = "assets/";
-    //var sounds = [
-    //    { id: "background", src: "bgGame.ogg" },
-    //    { id: "click", src: "bob.ogg" }
-    //];
+    var audioPath = "assets/";
+    var sounds = [
+        { id: "background", src: "bgGame.ogg" },
+        { id: "click", src: "bob.ogg" }
+    ];
 
-    //createjs.Sound.alternateExtensions = ["mp3"];
-    //// after load is complete
-    //createjs.Sound.play("background");
+    createjs.Sound.alternateExtensions = ["mp3"];
+    // after load is complete
+    createjs.Sound.play("background");
     createjs.Ticker.setFPS(60); // Set the frame rate to 60 fps
     createjs.Ticker.addEventListener("tick", tick);
 
@@ -89,9 +85,6 @@ function mainInfo() {
 
     backbutton = new Image();
     backbutton.src = "assets/images/back.png";
-
-    playAgain = new Image();
-    playAgain.src = "assets/images/playagain.png";
 }
 function playImg() {
     playbutton = new createjs.Bitmap(play);
@@ -175,106 +168,42 @@ function nameImg() {
     stage.update();
 }
 function main() {
-    scoreText = new createjs.Text("Score:"+score, "20px Impact", "#fff");
+    scoreText = new createjs.Text("0", "20px Impact", "#fff");
+    scoreText.text = "Score: "
     scoreText.x = 25;
     scoreText.y = 25;
     stage.addChild(scoreText);
-
     levelText = new createjs.Text("Level:1", "20px Impact", "#fff");
     levelText.x = 500;
     levelText.y = 25;
     stage.addChild(levelText);
-
-    blocksFront = new createjs.Shape();
-    blocksFront.graphics.beginFill("#c20909").drawRect(0, 0, 25, 100);
-    blocksFront.x = 300;
-    blocksFront.y = 0;
-    createjs.Tween.get(blocksFront, { loop: true })
-    .to({ x: 300, y :300 }, 3000, createjs.Ease.getPowInOut(1))
-    .to({ x:300,y: 0},3000,createjs.Ease.getPowInOut(1));
-    stage.addChild(blocksFront);
-
-    blocksBack = new createjs.Shape();
-    blocksBack.graphics.beginFill("#c20909").drawRect(0, 0, 25, 100);
-    blocksBack.x = 380;
-    blocksBack.y = 300;
-    createjs.Tween.get(blocksBack, { loop: true })
-    .to({ x: 380, y: 0 }, 3000, createjs.Ease.getPowInOut(1))
-    .to({ x: 380, y: 300 }, 3000, createjs.Ease.getPowInOut(1));
-    stage.addChild(blocksBack);
-
     hole = new createjs.Graphics().beginStroke('#000').beginFill('#000').drawCircle(0, 0, 13);
-    circleDest = new createjs.Shape(hole);
-    circleDest.x = 500;
-    circleDest.y = 200;
-    stage.addChild(circleDest);
-
+    circle1 = new createjs.Shape(hole);
+    circle1.x = 500;
+    circle1.y = 200;
+    stage.addChild(circle1);
+    createjs.Tween.get(circle1, { loop: true })
+    .to({ x: 500, y: 0 }, 1000, createjs.Ease.getPowInOut(1));
     ball = new createjs.Graphics().beginStroke('#000').beginFill('#fff').drawCircle(0, 0, 10);
     circle = new createjs.Shape(ball);
     circle.x = 150;
     circle.y = 200;
     stage.addChild(circle);
 
-    //circle.addEventListener("mousedown", function (event) {
-    //    createjs.Tween.get(circle, { loop: false })
-    //    .to({ x: 500, y: 200 }, 1000, createjs.Ease.getPowInOut(1))
-    //    .to({ alpha: 0, y: 200 }, 500, createjs.Ease.getPowInOut(1));
-    //    if (circle.x == 500) {
-    //        console.log("true");
-    //    }
-    //});
     circle.addEventListener("click", goal);
-   
 }
 function goal() {
-    createjs.Tween.get(circle)
-          .to({ x: 500, y: 200 }, 1000, createjs.Ease.getPowInOut(1))
-          .to({ alpha: 0, y: 200 }, 500, createjs.Ease.getPowInOut(1))
-         .call(handleComplete);
-    function handleComplete() {
-        score += 1000;
-            gameOver();
-        }
+    createjs.Tween.get(circle, { loop: false })
+   .to({ x: 500, y: 200 }, 1000, createjs.Ease.getPowInOut(1))
+   .to({ alpha: 0, y: 200 }, 500, createjs.Ease.getPowInOut(1));
+
+    createjs.Ticker.setFPS(1000);
+
+    stage.removeChild(circle)
 }
 function updateScore() {
     nextLevel = new createjs.Text("Level-2", "20px Impact", "#fff");
     nextLevel.x = canvas.width / 2;
     nextLevel.y = canvas.height / 3;
     stage.addChild(nextLevel);
-}
-function gameOver() {
-    stage.removeAllChildren();
-    var finalScore = new createjs.Text("FinalScore:"+score,"30px Impact", "#fff");
-    finalScore.x = 220;
-    finalScore.y = 100;
-    stage.addChild(finalScore);
-    var congrats = new createjs.Text("Congratulations you won the game", "30px Impact", "#639ad3");
-    congrats.x = 120;
-    congrats.y = 140;
-    stage.addChild(congrats);
-    var gameover = new createjs.Text("Game Over", "40px Impact", "#e2e400");
-    gameover.x = 230;
-    gameover.y = 180;
-    stage.addChild(gameover);
-    playAgainButton = new createjs.Bitmap(playAgain);
-    playAgainButton.x = 235;
-    playAgainButton.y = 230;
-    stage.addChild(playAgainButton);
-    stage.update();
-    playAgainButton.addEventListener("click", playAgainEvent);
-    playAgainButton.addEventListener("mouseout", buttonOutplayAgain);
-    playAgainButton.addEventListener("mouseover", buttonOverplayAgain);
-}
-function playAgainEvent() {
-    stage.removeAllChildren();
-    score = 0;
-    main();
-}
-
-function buttonOutplayAgain() {
-    playAgainButton.alpha = 1;
-}
-
-function buttonOverplayAgain() {
-    playAgainButton.alpha = 0.5;
 }

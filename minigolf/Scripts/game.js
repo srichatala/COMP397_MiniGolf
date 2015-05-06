@@ -24,6 +24,9 @@ var playbutton;
 var instrButton;
 var bgrnd;
 var title;
+var instructionsText;
+var backbutton;
+var backhome;
 
 //initial function to load the game
 function init() {
@@ -32,7 +35,17 @@ function init() {
     stage = new createjs.Stage(canvas);
     stage.enableMouseOver(20);
     score = 0;
+    createjs.Sound.initializeDefaultPlugins();
 
+    var audioPath = "assets/";
+    var sounds = [
+        { id: "background", src: "bgGame.ogg" },
+        { id: "click", src: "bob.ogg" }
+    ];
+
+    createjs.Sound.alternateExtensions = ["mp3"];
+    // after load is complete
+    createjs.Sound.play("background");
     createjs.Ticker.setFPS(60); // Set the frame rate to 60 fps
     createjs.Ticker.addEventListener("tick", tick);
 
@@ -69,6 +82,9 @@ function mainInfo() {
     titleImg = new Image();
     titleImg.src = "assets/images/title.png";
     titleImg.onload = nameImg;
+
+    backbutton = new Image();
+    backbutton.src = "assets/images/back.png";
 }
 function playImg() {
     playbutton = new createjs.Bitmap(play);
@@ -77,14 +93,14 @@ function playImg() {
     stage.addChild(playbutton);
     stage.update();
     playbutton.addEventListener("click", gameStart);
-    playbutton.addEventListener("mouseout", buttonOut);
-    playbutton.addEventListener("mouseover", buttonOver);
+    playbutton.addEventListener("mouseout", buttonOutplayImg);
+    playbutton.addEventListener("mouseover", buttonOverplayImg);
 }
-function buttonOut() {
+function buttonOutplayImg() {
     playbutton.alpha = 1;
 }
 
-function buttonOver() {
+function buttonOverplayImg() {
     playbutton.alpha = 0.5;
 }
 function gameStart() {
@@ -101,14 +117,14 @@ function instrImg() {
     stage.addChild(instrButton);
     stage.update();
     instrButton.addEventListener("click", instructionsInfo);
-    instrButton.addEventListener("mouseout", buttonOut1);
-    instrButton.addEventListener("mouseover", buttonOver1);
+    instrButton.addEventListener("mouseout", buttonOutinstrImg);
+    instrButton.addEventListener("mouseover", buttonOverinstrImg);
 }
-function buttonOut1() {
+function buttonOutinstrImg() {
     instrButton.alpha = 1;
 }
 
-function buttonOver1() {
+function buttonOverinstrImg() {
     instrButton.alpha = 0.5;
 }
 function instructionsInfo() {
@@ -119,7 +135,30 @@ function instructionsInfo() {
     instructionsDetails();
 }
 function instructionsDetails() {
-    
+    instructionsText = new createjs.Text("Instructions:\n\n1.Click on white ball to make goal\n\n2.For each goal player will get 1000\n   points", "40px impact", "#ffffff");
+    instructionsText.x = 25;
+    instructionsText.y = 15;
+    stage.addChild(instructionsText);
+    backhome = new createjs.Bitmap(backbutton);
+    backhome.x = 500;
+    backhome.y = 340;
+    stage.addChild(backhome);
+    stage.update();
+    backhome.addEventListener("click", backhomeEvent);
+    backhome.addEventListener("mouseout", buttonOutback);
+    backhome.addEventListener("mouseover", buttonOverback);
+}
+function buttonOutback() {
+    backhome.alpha = 1;
+}
+
+function buttonOverback() {
+    backhome.alpha = 0.5;
+}
+function backhomeEvent() {
+    stage.removeChild(instructionsText);
+    stage.removeChild(backhome);
+    mainInfo();
 }
 function nameImg() {
     title = new createjs.Bitmap(titleImg);

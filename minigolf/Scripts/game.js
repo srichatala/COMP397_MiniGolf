@@ -188,7 +188,7 @@ function main() {
     stage.addChild(levelText);
 
     blocksFront = new createjs.Shape();
-    blocksFront.graphics.beginFill("#c20909").drawRect(0, 0, 25, 100);
+    blocksFront.graphics.beginFill("#c20909").drawCircle(0, 0, 25);
     blocksFront.x = 300;
     blocksFront.y = 0;
     createjs.Tween.get(blocksFront, { loop: true })
@@ -234,6 +234,18 @@ function goal() {
           .to({ alpha: 0, y: 200 }, 500, createjs.Ease.getPowInOut(1))
          .call(handleComplete);
     function handleComplete() {
+        var dx = blocksFront.x - circle.x;
+        var dy = blocksFront.y - circle.y;
+        var circleRadius = Math.sqrt(((circle.x / 2 * circle.x / 2) + (circle.y / 2 * circle.y / 2)));
+        var blockRadius = Math.sqrt(((blocksFront.x / 2 * blocksFront.x / 2) + (blocksFront.y / 2 * blocksFront.y / 2)));
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        console.log(circleRadius);
+        if (distance < circleRadius + blockRadius) {
+            console.log("collision occure");
+            stage.removeChild(circle);
+        } else {
+            console.log("collision not occure");
+        }
         score += 1000;
         level += 1;
         stage.removeAllChildren();

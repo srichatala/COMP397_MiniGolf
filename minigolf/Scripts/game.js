@@ -613,7 +613,7 @@ function playAgainEvent() {
     stage.removeAllChildren();
     score = 0;
     level = 0;
-    main();
+    mainInfo();
 }
 
 function buttonOutplayAgain() {

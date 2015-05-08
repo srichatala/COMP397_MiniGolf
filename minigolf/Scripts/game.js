@@ -302,7 +302,7 @@ function Level1Event() {
     if (intersect == undefined) {
         if (circlesIntersect(circle.x, circle.y, getCircleRadius(circle),
         circleDest.x, circleDest.y, getCircleRadius(circleDest))) {
-            createjs.Sound.play("hit");
+            createjs.Sound.play("goal");
             successinfo();
         }
     }
@@ -452,8 +452,8 @@ function mainLevel3() {
     blocksFront.x = 280;
     blocksFront.y = 0;
     createjs.Tween.get(blocksFront, { loop: true })
-    .to({ x: 280, y: 400 }, 3500, createjs.Ease.getPowInOut(1))
-    .to({ x: 280, y: 0 }, 3500, createjs.Ease.getPowInOut(1));
+    .to({ x: 280, y: 400 }, 2000, createjs.Ease.getPowInOut(1))
+    .to({ x: 280, y: 0 }, 2000, createjs.Ease.getPowInOut(1));
     blocksFront.image.onload = function () {
         blockCircle1 = circleBounds(blocksFront);
         stage.addChild(blockCircle1);
@@ -466,8 +466,8 @@ function mainLevel3() {
     blocksBack.x = 350;
     blocksBack.y = 400;
     createjs.Tween.get(blocksBack, { loop: true })
-    .to({ x: 350, y: 0 }, 2500, createjs.Ease.getPowInOut(1))
-    .to({ x: 350, y: 400 }, 2500, createjs.Ease.getPowInOut(1));
+    .to({ x: 350, y: 0 }, 1500, createjs.Ease.getPowInOut(1))
+    .to({ x: 350, y: 400 }, 1500, createjs.Ease.getPowInOut(1));
     blocksBack.image.onload = function () {
         blockCircle2 = circleBounds(blocksBack);
         stage.addChild(blockCircle2);
@@ -480,8 +480,8 @@ function mainLevel3() {
     blocksMiddle.x = 420;
     blocksMiddle.y = 0;
     createjs.Tween.get(blocksMiddle, { loop: true })
-    .to({ x: 420, y: 400 }, 1500, createjs.Ease.getPowInOut(1))
-    .to({ x: 420, y: 0 }, 1500, createjs.Ease.getPowInOut(1));
+    .to({ x: 420, y: 400 }, 1000, createjs.Ease.getPowInOut(1))
+    .to({ x: 420, y: 0 }, 1000, createjs.Ease.getPowInOut(1));
     blocksMiddle.image.onload = function () {
         blockCircle3 = circleBounds(blocksMiddle);
         stage.addChild(blockCircle3);

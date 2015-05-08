@@ -20,6 +20,7 @@ var level, levelText;
 var circle;
 var playbutton;
 var instrButton;
+var ballInstr;
 var bgrnd;
 var title;
 var instructionsText;
@@ -138,17 +139,34 @@ function instructionsInfo() {
 
 //List all instructions of the game
 function instructionsDetails() {
+    //instructions text
     instructionsText = new createjs.Text("Instructions:\n\n1.Click on white ball to make goal\n\n2.For each goal player will get 1000 points\n\n3.White ball tocuhes the red ball game over\n\n4.In each level one red ball will be increased", "30px impact", "#ffffff");
     instructionsText.x = 25;
     instructionsText.y = 15;
     stage.addChild(instructionsText);
+    //back to home button
     backhome = new createjs.Bitmap(backbutton);
     backhome.x = 500;
     backhome.y = 340;
     stage.addChild(backhome);
+    //rorating ball
+    ballInstr = new createjs.Bitmap("assets/images/ball.png");
+    var width = 200;
+    var height = 100
+    ballInstr.regX = width / 2;
+    ballInstr.regY = height / 2;
+    ballInstr.x = 100;
+    ballInstr.y = 300;
+    stage.addChild(ballInstr);
+    createjs.Ticker.setFPS(50);
+    //Event to call back home   
+    createjs.Ticker.addEventListener("tick", ballInstrEvent);
     backhome.addEventListener("click", backhomeEvent);
     backhome.addEventListener("mouseout", buttonOutback);
     backhome.addEventListener("mouseover", buttonOverback);
+}
+function ballInstrEvent() {
+    ballInstr.rotation += 0.05;
 }
 function buttonOutback() {
     backhome.alpha = 1;
@@ -218,8 +236,8 @@ function main() {
 
     //display red ball to stop play not to make a goal
     blocksFront = new createjs.Bitmap("assets/images/wall.png");
-    blocksFront.regX = 50; // Half image width
-    blocksFront.regY = 50; // Half image height
+    blocksFront.regX = 50; 
+    blocksFront.regY = 50; 
     blocksFront.x = 300;
     blocksFront.y = 0;
     createjs.Tween.get(blocksFront, { loop: true })
@@ -264,12 +282,11 @@ function goal() {
     //play the sound when clicks on ball
     createjs.Sound.play("hit");
     createjs.Ticker.setFPS(50);
-    createjs.Ticker.addEventListener("tick", onTick);
+    createjs.Ticker.addEventListener("tick", Level1Event);
 }
 //function to pass the ball to make a goal
-function onTick() {
+function Level1Event() {
     circle.x += 10;
-    //circle.rotation = circle.rotation + 1;
     stage.removeChild(boundingCircle1);
     boundingCircle1 = createBoundingCircle(circle);
 
@@ -290,16 +307,18 @@ function onTick() {
         }
     }
 }
+//function to showup level completed message
 function successinfo() {
     score += 1000;
     level += 1;
     stage.removeAllChildren();
-    var levelbutton = new createjs.Text("Click here to go next level", "40px Impact", "#fff");
-    levelbutton.x = 130;
+    var levelbutton = new createjs.Text("Click here to go level-" + level, "40px Impact", "#fff");
+    levelbutton.x = 110;
     levelbutton.y = 180;
     levelbutton.addEventListener("click", mainLevel2);
     stage.addChild(levelbutton);
 }
+//function to prepare all the objects in level2
 function mainLevel2() {
     stage.removeAllChildren();
     scoreText = new createjs.Text("Score:" + score, "20px Impact", "#fff");
@@ -363,17 +382,18 @@ function mainLevel2() {
         boundingCircle1 = createBoundingCircle(circleLevel2);
         stage.addChild(boundingCircle1);
     }
-    circleLevel2.addEventListener("click", goal2);
+    circleLevel2.addEventListener("click", level2Goal);
     stage.addChild(circleLevel2);
 }
-function goal2() {
+//call the level2 event
+function level2Goal() {
     createjs.Sound.play("hit");
     createjs.Ticker.setFPS(50);
-    createjs.Ticker.addEventListener("tick", onTick2);
+    createjs.Ticker.addEventListener("tick", Level2Event);
 }
-function onTick2() {
+//function to check the collision of the objects or goal
+function Level2Event() {
     circleLevel2.x += 10;
-    //circle.rotation = circle.rotation + 1;
     stage.removeChild(boundingCircle1);
     boundingCircle1 = createBoundingCircle(circleLevel2);
 
@@ -397,20 +417,23 @@ function onTick2() {
         if (circlesIntersect(circleLevel2.x, circleLevel2.y, getBoundingCircleRadius(circleLevel2),
             circleDest.x, circleDest.y, getBoundingCircleRadius(circleDest))) {
             createjs.Sound.play("goal");
-            SuccessLevel();
+            Level2Complete();
         }
     }
 }
-function SuccessLevel() {
+//function to showup level completed message
+function Level2Complete() {
     score += 1000;
     level += 1;
     stage.removeAllChildren();
-    var levelbutton = new createjs.Text("Click here to go next level", "40px Impact", "#fff");
-    levelbutton.x = 130;
+    var levelbutton = new createjs.Text("Click here to go level-"+level, "40px Impact", "#fff");
+    levelbutton.x = 110;
     levelbutton.y = 180;
     stage.addChild(levelbutton);
     levelbutton.addEventListener("click", mainLevel3)
 }
+
+//function to call level3
 function mainLevel3() {
     stage.removeAllChildren();
     scoreText = new createjs.Text("Score:" + score, "20px Impact", "#fff");
@@ -424,8 +447,8 @@ function mainLevel3() {
     stage.addChild(levelText);
 
     blocksFront = new createjs.Bitmap("assets/images/wall.png");
-    blocksFront.regX = 50; // Half image width
-    blocksFront.regY = 50; // Half image height
+    blocksFront.regX = 50; 
+    blocksFront.regY = 50; 
     blocksFront.x = 280;
     blocksFront.y = 0;
     createjs.Tween.get(blocksFront, { loop: true })
@@ -438,8 +461,8 @@ function mainLevel3() {
     stage.addChild(blocksFront);
 
     blocksBack = new createjs.Bitmap("assets/images/wall.png");
-    blocksBack.regX = 50; // Half image width
-    blocksBack.regY = 50; // Half image height
+    blocksBack.regX = 50; 
+    blocksBack.regY = 50; 
     blocksBack.x = 350;
     blocksBack.y = 400;
     createjs.Tween.get(blocksBack, { loop: true })
@@ -452,8 +475,8 @@ function mainLevel3() {
     stage.addChild(blocksBack);
 
     blocksMiddle = new createjs.Bitmap("assets/images/wall.png");
-    blocksMiddle.regX = 50; // Half image width
-    blocksMiddle.regY = 50; // Half image height
+    blocksMiddle.regX = 50; 
+    blocksMiddle.regY = 50;
     blocksMiddle.x = 420;
     blocksMiddle.y = 0;
     createjs.Tween.get(blocksMiddle, { loop: true })
@@ -466,10 +489,9 @@ function mainLevel3() {
     stage.addChild(blocksMiddle);
 
 
-    // hole = new createjs.Graphics().beginStroke('#000').beginFill('#000').drawCircle(0, 0, 13);
     circleDest = new createjs.Bitmap("assets/images/dest.png");
-    circleDest.regX = 30; // Half image width
-    circleDest.regY = 40; // Half image height
+    circleDest.regX = 30;
+    circleDest.regY = 40;
     circleDest.x = 500;
     circleDest.y = 200;
     circleDest.image.onload = function () {
@@ -478,10 +500,9 @@ function mainLevel3() {
     }
     stage.addChild(circleDest);
 
-    // ball = new createjs.Graphics().beginStroke('#000').beginFill('#fff').drawCircle(0, 0, 10);
     circleLevel3 = new createjs.Bitmap("assets/images/ball1.png");
-    circleLevel3.regX = 30; // Half image width
-    circleLevel3.regY = 40; // Half image height
+    circleLevel3.regX = 30; 
+    circleLevel3.regY = 40; 
     circleLevel3.x = 50;
     circleLevel3.y = 200;
     circleLevel3.image.onload = function () {
@@ -489,17 +510,18 @@ function mainLevel3() {
         stage.addChild(circleLevel3);
     }
 
-    circleLevel3.addEventListener("click", goal3);
+    circleLevel3.addEventListener("click", level3Goal);
     stage.addChild(circleLevel3);
 }
-function goal3() {
+//function to the level event
+function level3Goal() {
     createjs.Sound.play("hit");
     createjs.Ticker.setFPS(50);
-    createjs.Ticker.addEventListener("tick", onTick3);
+    createjs.Ticker.addEventListener("tick", Level3Event);
 }
-function onTick3() {
+//function to check the collision or goal
+function Level3Event() {
     circleLevel3.x += 10;
-    //circle.rotation = circle.rotation + 1;
     stage.removeChild(boundingCircle1);
     boundingCircle1 = createBoundingCircle(circleLevel3);
 
@@ -534,7 +556,7 @@ function onTick3() {
         }
     }
 }
-
+//function to show game lost details
 function gameLost() {
     stage.removeAllChildren();
     var finalScore = new createjs.Text("FinalScore:" + score, "30px Impact", "#fff");
@@ -558,6 +580,7 @@ function gameLost() {
     playAgainButton.addEventListener("mouseover", buttonOverplayAgain);
     stage.addChild(playAgainButton);
 }
+//function to shoe gameover details
 function gameOver() {
     stage.removeAllChildren();
     score += 1000;
@@ -583,6 +606,8 @@ function gameOver() {
     playAgainButton.addEventListener("mouseover", buttonOverplayAgain);
     stage.addChild(playAgainButton);
 }
+
+//function to call the play gain event
 function playAgainEvent() {
     location.reload();
     stage.removeAllChildren();

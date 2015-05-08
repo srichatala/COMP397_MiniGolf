@@ -55,10 +55,11 @@ function init() {
 
     mainInfo();
 }
-function tick(e) {
+function tick() {
     stage.update();
     //play background music of the game
-    createjs.Sound.play("background");
+    var instance = createjs.Sound.play("background");
+    instance.volume = 0.005;
 }
 
 //Ball roating on startup screeen
@@ -302,7 +303,7 @@ function Level1Event() {
     if (intersect == undefined) {
         if (circlesIntersect(circle.x, circle.y, getBoundingCircleRadius(circle),
         circleDest.x, circleDest.y, getBoundingCircleRadius(circleDest))) {
-            createjs.Sound.play("hit");
+            createjs.Sound.play("goal");
             successinfo();
         }
     }

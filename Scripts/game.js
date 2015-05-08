@@ -1,7 +1,7 @@
 ﻿//Author:Srinivasarao Chatala
 //Date-Created:04/25/2015
 //Last-modified-by: Sri Chatala
-//Last-modified-Date: 05/07/2015
+//Last-modified-Date: 05/08/2015
 //Description:This game is all about mini golf, player clicks on white ball to make a goal.
 //            white ball should not touch the red ball while making the goal. 
 //            if the player touches the red ball game will be over. In each layer, 
@@ -55,10 +55,10 @@ function init() {
 
     mainInfo();
 }
-function tick() {
-	//play background music of the game
-    createjs.Sound.play("background");
+function tick(e) {
     stage.update();
+    //play background music of the game
+    createjs.Sound.play("background");
 }
 
 //Ball roating on startup screeen
@@ -196,18 +196,18 @@ function gameStart() {
 }
 
 //function to find the radius of the circle
-function getBoundingCircleRadius(sprite) {
-    var radiusInfo = Math.sqrt(((sprite.image.width / 2 * sprite.image.width / 2)
-                    + (sprite.image.height / 2 * sprite.image.height / 2)));
+function getCircleRadius(circleInfo) {
+    var radiusInfo = Math.sqrt(((circleInfo.image.width / 2 * circleInfo.image.width / 2)
+                    + (circleInfo.image.height / 2 * circleInfo.image.height / 2)));
     radiusInfo = radiusInfo - 15;
     return radiusInfo;
 }
 
 //create bound circle of each image in the game
-function createBoundingCircle(sprite) {
+function circleBounds(circleDetails) {
     var g = new createjs.Graphics();
-    var radius = getBoundingCircleRadius(sprite);
-    g.drawCircle(sprite.x, sprite.y, radius);
+    var radius = getCircleRadius(circleDetails);
+    g.drawCircle(circleDetails.x, circleDetails.y, radius);
     return new createjs.Shape(g);
 }
 //function to find intersecting point
@@ -244,7 +244,7 @@ function main() {
     .to({ x: 300, y: 400 }, 700, createjs.Ease.getPowInOut(1))
     .to({ x: 300, y: 0 }, 700, createjs.Ease.getPowInOut(1));
     blocksFront.image.onload = function () {
-        blockCircle1 = createBoundingCircle(blocksFront);
+        blockCircle1 = circleBounds(blocksFront);
         stage.addChild(blockCircle1);
     }
     stage.addChild(blocksFront);
@@ -257,7 +257,7 @@ function main() {
     circleDest.x = 500;
     circleDest.y = 200;
     circleDest.image.onload = function () {
-        boundingCircle2 = createBoundingCircle(circleDest);
+        boundingCircle2 = circleBounds(circleDest);
         stage.addChild(boundingCircle2);
     }
     stage.addChild(circleDest);
@@ -269,7 +269,7 @@ function main() {
     circle.x = 50;
     circle.y = 200;
     circle.image.onload = function () {
-        boundingCircle1 = createBoundingCircle(circle);
+        boundingCircle1 = circleBounds(circle);
         stage.addChild(boundingCircle1);
     }
     //white ball click event to make a goal
@@ -288,21 +288,21 @@ function goal() {
 function Level1Event() {
     circle.x += 10;
     stage.removeChild(boundingCircle1);
-    boundingCircle1 = createBoundingCircle(circle);
+    boundingCircle1 = circleBounds(circle);
 
     stage.addChild(boundingCircle1);
     stage.addChild(boundingCircle2);
     stage.addChild(blockCircle1);
-    if (circlesIntersect(circle.x, circle.y, getBoundingCircleRadius(circle),
-      blocksFront.x, blocksFront.y, getBoundingCircleRadius(blocksFront))) {
+    if (circlesIntersect(circle.x, circle.y, getCircleRadius(circle),
+      blocksFront.x, blocksFront.y, getCircleRadius(blocksFront))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
     if (intersect == undefined) {
-        if (circlesIntersect(circle.x, circle.y, getBoundingCircleRadius(circle),
-        circleDest.x, circleDest.y, getBoundingCircleRadius(circleDest))) {
-            createjs.Sound.play("hit");
+        if (circlesIntersect(circle.x, circle.y, getCircleRadius(circle),
+        circleDest.x, circleDest.y, getCircleRadius(circleDest))) {
+            createjs.Sound.play("goal");
             successinfo();
         }
     }
@@ -340,7 +340,7 @@ function mainLevel2() {
     .to({ x: 300, y: 400 }, 1000, createjs.Ease.getPowInOut(1))
     .to({ x: 300, y: 0 }, 1000, createjs.Ease.getPowInOut(1));
     blocksFront.image.onload = function () {
-        blockCircle1 = createBoundingCircle(blocksFront);
+        blockCircle1 = circleBounds(blocksFront);
         stage.addChild(blockCircle1);
     }
     stage.addChild(blocksFront);
@@ -354,7 +354,7 @@ function mainLevel2() {
     .to({ x: 380, y: 0 }, 700, createjs.Ease.getPowInOut(1))
     .to({ x: 380, y: 400 }, 700, createjs.Ease.getPowInOut(1));
     blocksBack.image.onload = function () {
-        blockCircle2 = createBoundingCircle(blocksBack);
+        blockCircle2 = circleBounds(blocksBack);
         stage.addChild(blockCircle2);
     }
     stage.addChild(blocksBack);
@@ -368,7 +368,7 @@ function mainLevel2() {
     circleDest.x = 500;
     circleDest.y = 200;
     circleDest.image.onload = function () {
-        boundingCircle2 = createBoundingCircle(circleDest);
+        boundingCircle2 = circleBounds(circleDest);
         stage.addChild(boundingCircle2);
     }
     stage.addChild(circleDest);
@@ -379,7 +379,7 @@ function mainLevel2() {
     circleLevel2.x = 50;
     circleLevel2.y = 200;
     circle.image.onload = function () {
-        boundingCircle1 = createBoundingCircle(circleLevel2);
+        boundingCircle1 = circleBounds(circleLevel2);
         stage.addChild(boundingCircle1);
     }
     circleLevel2.addEventListener("click", level2Goal);
@@ -395,27 +395,27 @@ function level2Goal() {
 function Level2Event() {
     circleLevel2.x += 10;
     stage.removeChild(boundingCircle1);
-    boundingCircle1 = createBoundingCircle(circleLevel2);
+    boundingCircle1 = circleBounds(circleLevel2);
 
     stage.addChild(boundingCircle1);
     stage.addChild(boundingCircle2);
     stage.addChild(blockCircle1);
     stage.addChild(blockCircle2);
-    if (circlesIntersect(circleLevel2.x, circleLevel2.y, getBoundingCircleRadius(circleLevel2),
-     blocksFront.x, blocksFront.y, getBoundingCircleRadius(blocksFront))) {
+    if (circlesIntersect(circleLevel2.x, circleLevel2.y, getCircleRadius(circleLevel2),
+     blocksFront.x, blocksFront.y, getCircleRadius(blocksFront))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
-    if (circlesIntersect(circleLevel2.x, circleLevel2.y, getBoundingCircleRadius(circleLevel2),
-    blocksBack.x, blocksBack.y, getBoundingCircleRadius(blocksBack))) {
+    if (circlesIntersect(circleLevel2.x, circleLevel2.y, getCircleRadius(circleLevel2),
+    blocksBack.x, blocksBack.y, getCircleRadius(blocksBack))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
     if (intersect == undefined) {
-        if (circlesIntersect(circleLevel2.x, circleLevel2.y, getBoundingCircleRadius(circleLevel2),
-            circleDest.x, circleDest.y, getBoundingCircleRadius(circleDest))) {
+        if (circlesIntersect(circleLevel2.x, circleLevel2.y, getCircleRadius(circleLevel2),
+            circleDest.x, circleDest.y, getCircleRadius(circleDest))) {
             createjs.Sound.play("goal");
             Level2Complete();
         }
@@ -452,10 +452,10 @@ function mainLevel3() {
     blocksFront.x = 280;
     blocksFront.y = 0;
     createjs.Tween.get(blocksFront, { loop: true })
-    .to({ x: 280, y: 400 }, 3500, createjs.Ease.getPowInOut(1))
-    .to({ x: 280, y: 0 }, 3500, createjs.Ease.getPowInOut(1));
+    .to({ x: 280, y: 400 }, 2000, createjs.Ease.getPowInOut(1))
+    .to({ x: 280, y: 0 }, 2000, createjs.Ease.getPowInOut(1));
     blocksFront.image.onload = function () {
-        blockCircle1 = createBoundingCircle(blocksFront);
+        blockCircle1 = circleBounds(blocksFront);
         stage.addChild(blockCircle1);
     }
     stage.addChild(blocksFront);
@@ -466,10 +466,10 @@ function mainLevel3() {
     blocksBack.x = 350;
     blocksBack.y = 400;
     createjs.Tween.get(blocksBack, { loop: true })
-    .to({ x: 350, y: 0 }, 2500, createjs.Ease.getPowInOut(1))
-    .to({ x: 350, y: 400 }, 2500, createjs.Ease.getPowInOut(1));
+    .to({ x: 350, y: 0 }, 1500, createjs.Ease.getPowInOut(1))
+    .to({ x: 350, y: 400 }, 1500, createjs.Ease.getPowInOut(1));
     blocksBack.image.onload = function () {
-        blockCircle2 = createBoundingCircle(blocksBack);
+        blockCircle2 = circleBounds(blocksBack);
         stage.addChild(blockCircle2);
     }
     stage.addChild(blocksBack);
@@ -480,10 +480,10 @@ function mainLevel3() {
     blocksMiddle.x = 420;
     blocksMiddle.y = 0;
     createjs.Tween.get(blocksMiddle, { loop: true })
-    .to({ x: 420, y: 400 }, 1500, createjs.Ease.getPowInOut(1))
-    .to({ x: 420, y: 0 }, 1500, createjs.Ease.getPowInOut(1));
+    .to({ x: 420, y: 400 }, 1000, createjs.Ease.getPowInOut(1))
+    .to({ x: 420, y: 0 }, 1000, createjs.Ease.getPowInOut(1));
     blocksMiddle.image.onload = function () {
-        blockCircle3 = createBoundingCircle(blocksMiddle);
+        blockCircle3 = circleBounds(blocksMiddle);
         stage.addChild(blockCircle3);
     }
     stage.addChild(blocksMiddle);
@@ -495,7 +495,7 @@ function mainLevel3() {
     circleDest.x = 500;
     circleDest.y = 200;
     circleDest.image.onload = function () {
-        boundingCircle2 = createBoundingCircle(circleDest);
+        boundingCircle2 = circleBounds(circleDest);
         stage.addChild(boundingCircle2);
     }
     stage.addChild(circleDest);
@@ -506,7 +506,7 @@ function mainLevel3() {
     circleLevel3.x = 50;
     circleLevel3.y = 200;
     circleLevel3.image.onload = function () {
-        boundingCircle1 = createBoundingCircle(circleLevel3);
+        boundingCircle1 = circleBounds(circleLevel3);
         stage.addChild(circleLevel3);
     }
 
@@ -523,34 +523,34 @@ function level3Goal() {
 function Level3Event() {
     circleLevel3.x += 10;
     stage.removeChild(boundingCircle1);
-    boundingCircle1 = createBoundingCircle(circleLevel3);
+    boundingCircle1 = circleBounds(circleLevel3);
 
     stage.addChild(boundingCircle1);
     stage.addChild(boundingCircle2);
     stage.addChild(blockCircle1);
     stage.addChild(blockCircle2);
     stage.addChild(blockCircle3);
-    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getBoundingCircleRadius(circleLevel3),
-                 blocksFront.x, blocksFront.y, getBoundingCircleRadius(blocksFront))) {
+    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getCircleRadius(circleLevel3),
+                 blocksFront.x, blocksFront.y, getCircleRadius(blocksFront))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
-    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getBoundingCircleRadius(circleLevel3),
-                    blocksMiddle.x, blocksMiddle.y, getBoundingCircleRadius(blocksMiddle))) {
+    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getCircleRadius(circleLevel3),
+                    blocksMiddle.x, blocksMiddle.y, getCircleRadius(blocksMiddle))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
-    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getBoundingCircleRadius(circleLevel3),
-                blocksBack.x, blocksBack.y, getBoundingCircleRadius(blocksBack))) {
+    if (circlesIntersect(circleLevel3.x, circleLevel3.y, getCircleRadius(circleLevel3),
+                blocksBack.x, blocksBack.y, getCircleRadius(blocksBack))) {
         createjs.Sound.play("die");
         gameLost();
         intersect = 1;
     }
     if (intersect == undefined) {
-        if (circlesIntersect(circleLevel3.x, circleLevel3.y, getBoundingCircleRadius(circleLevel3),
-            circleDest.x, circleDest.y, getBoundingCircleRadius(circleDest))) {
+        if (circlesIntersect(circleLevel3.x, circleLevel3.y, getCircleRadius(circleLevel3),
+            circleDest.x, circleDest.y, getCircleRadius(circleDest))) {
             createjs.Sound.play("goal");
             gameOver();
         }
@@ -613,7 +613,7 @@ function playAgainEvent() {
     stage.removeAllChildren();
     score = 0;
     level = 0;
-    main();
+    mainInfo();
 }
 
 function buttonOutplayAgain() {

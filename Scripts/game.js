@@ -55,10 +55,10 @@ function init() {
 
     mainInfo();
 }
-function tick(e) {
-    stage.update();
-    //play background music of the game
+function tick() {
+	//play background music of the game
     createjs.Sound.play("background");
+    stage.update();
 }
 
 //Ball roating on startup screeen

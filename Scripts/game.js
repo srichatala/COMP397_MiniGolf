@@ -609,11 +609,11 @@ function gameOver() {
 
 //function to call the play gain event
 function playAgainEvent() {
+    location.reload();
     stage.removeAllChildren();
     score = 0;
     level = 0;
     main();
-	location.reload();
 }
 
 function buttonOutplayAgain() {
